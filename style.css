@@ -15,6 +15,7 @@
   margin: 0;
   padding: 0;
 }
+
 body {
   font-family: "Inter", system-ui, sans-serif;
   background-color: var(--bg-body);
@@ -23,13 +24,15 @@ body {
 }
 
 .container {
-  max-width: 900px;
+  max-width: 950px;
   margin: 0 auto;
 }
+
 header {
   text-align: center;
   margin-bottom: 2rem;
 }
+
 h1 {
   color: var(--positive);
   letter-spacing: -1px;
@@ -45,20 +48,40 @@ h1 {
   margin-bottom: 1.5rem;
 }
 
-/* Cadastro */
+/* Cadastro e Configurações */
 .setup-grid {
   display: flex;
   gap: 10px;
   margin: 1rem 0;
 }
-input[type="text"] {
+
+.config-campeonato {
+    margin: 15px 0;
+    padding: 12px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 8px;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--text-main);
+}
+
+input[type="text"], select {
   flex: 1;
   background: #0f172a;
   border: 1px solid var(--border);
   color: white;
   padding: 12px;
   border-radius: 8px;
+  outline: none;
 }
+
+/* Botões */
 button {
   padding: 10px 20px;
   border-radius: 8px;
@@ -67,192 +90,159 @@ button {
   cursor: pointer;
   transition: 0.2s;
 }
-.btn-add {
-  background: #02895c;
-  color: #fefefe;
-}
-.btn-generate {
-  background: #186ab2;
-  color: #fff;
-  width: 100%;
-  margin-top: 10px;
-  font-size: 1rem;
-}
-.btn-import {
-  background: #6d6c6b;
-  color: #fff;
-  width: 100%;
-  margin-top: 10px;
-  font-size: 1rem;
-}
-.btn-export {
-  background: #475569;
-  color: white;
-}
-.btn-reset {
-  background: var(--negative);
-  color: white;
-}
 
-/* Rodadas */
+.btn-add { background: #02895c; color: #fefefe; }
+.btn-generate { background: #186ab2; color: #fff; width: 100%; margin-top: 10px; font-size: 1rem; }
+.btn-import { background: #475569; color: #fff; width: 100%; margin-top: 5px; }
+.btn-export { background: #334155; color: white; }
+.btn-reset { background: var(--negative); color: white; }
+
+/* Rodadas e Jogos */
 .rodadas-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
   gap: 1.5rem;
-}
-.espectador-box {
-  background: rgba(245, 158, 11, 0.1);
-  border: 1px dashed var(--warning);
-  color: var(--warning);
-  padding: 8px;
-  border-radius: 6px;
-  text-align: center;
-  margin-bottom: 1rem;
-  font-weight: bold;
-  font-size: 0.9rem;
 }
 
 .jogo-linha {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  gap: 5px;
   margin-bottom: 0.8rem;
-  padding: 8px;
+  padding: 4px;
   border-radius: 8px;
-  background: #0f172a;
+  background: rgba(15, 23, 42, 0.5);
+}
+
+.time-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px;
+    border-radius: 6px;
+    width: 40%;
+    transition: 0.3s;
+}
+
+.escudo {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    margin-bottom: 4px;
 }
 
 .time-label {
-  flex: 1;
-  font-size: 0.85rem;
-  padding: 6px;
-  border-radius: 4px;
-  transition: 0.3s;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-align: center;
 }
-.time-a {
-  text-align: right;
+
+.nome-jogador {
+    font-size: 0.65rem;
+    color: var(--text-dim);
 }
-.time-b {
-  text-align: left;
+
+.placar-input-group {
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
 input[type="number"] {
-  width: 50px;
-  background: var(--bg-card);
+  width: 45px;
+  background: var(--bg-body);
   border: 1px solid var(--border);
   color: white;
-  padding: 5px;
+  padding: 8px 4px;
   text-align: center;
-  border-radius: 4px;
+  border-radius: 6px;
   font-weight: bold;
-  font-family: monospace;
 }
 
-/* Cores de Resultado */
+/* Cores de Resultado dinâmicas */
 .vitoria {
-  background-color: #064e3b !important;
-  color: #a7f3d0;
+    background-color: rgba(16, 185, 129, 0.15) !important;
+    border: 1px solid var(--positive);
 }
 .derrota {
-  background-color: #7f1d1d !important;
-  color: #fecaca;
+    background-color: rgba(239, 68, 68, 0.15) !important;
+    border: 1px solid var(--negative);
 }
 .empate {
-  color: var(--warning);
+    background-color: rgba(245, 158, 11, 0.1) !important;
 }
 
 /* Tabela */
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 1rem;
 }
 th {
   background: #111827;
   color: var(--text-dim);
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   text-transform: uppercase;
-  padding: 12px;
+  padding: 12px 8px;
 }
 td {
-  padding: 12px;
+  padding: 10px 8px;
   text-align: center;
   border-bottom: 1px solid var(--border);
-}
-.pos-lider {
-  color: var(--positive);
-  font-weight: bold;
-}
-.pos-lanterna {
-  color: var(--negative);
-  font-weight: bold;
+  font-size: 0.9rem;
 }
 
-/* Remove as setinhas para navegadores baseados em Chrome, Safari e Edge */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+/* Bolinhas de Histórico (Forma) */
+.forma-ponto {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin: 0 2px;
+    display: inline-block;
+}
+.v-cor { background: var(--positive); }
+.d-cor { background: var(--negative); }
+.e-cor { background: var(--warning); }
+
+/* Ações Finais */
+.acoes-finais {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 2rem;
 }
 
-/* Remove as setinhas para o Firefox */
-input[type="number"] {
-  appearance: textfield;
-  -moz-appearance: textfield;
-}
-
-/* Estilo base para colunas que serão escondidas no mobile */
+/* Responsividade */
 @media (max-width: 600px) {
-    /* Esconde colunas de E, D, GP, GC e SG na tabela */
-    /* Assumindo a ordem: #, Nome, Pts, J, V, E, D, GP, GC, SG */
-    /*th:nth-child(5), td:nth-child(5), /* V */
+    /* Esconde colunas menos importantes no mobile */
+    th:nth-child(5), td:nth-child(5), /* V */
     th:nth-child(6), td:nth-child(6), /* E */
     th:nth-child(7), td:nth-child(7), /* D */
-    th:nth-child(8), td:nth-child(8), /* GP */
-    th:nth-child(9), td:nth-child(9), /* GC */
-    th:nth-child(10), td:nth-child(10) /* SG */ {
+    th:nth-child(9), td:nth-child(9)  /* Forma */ {
         display: none;
     }
 
-    /* Ajuste de fonte para caber melhor */
-    table {
-        font-size: 0.85rem;
-    }
+    .rodadas-grid { grid-template-columns: 1fr; }
     
-    td, th {
-        padding: 8px 4px;
-    }
+    .time-label { font-size: 0.75rem; }
 }
 
-@media (max-width: 480px) {
-    .rodadas-grid {
-        grid-template-columns: 1fr; /* Força uma coluna única */
-    }
+/* Remove setinhas do input number */
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+input[type="number"] { appearance: textfield; -moz-appearance: textfield; }
 
-    .jogo-linha {
-        gap: 5px;
-        padding: 6px;
-    }
-
-    .time-label {
-        font-size: 0.75rem; /* Diminui o texto do nome do jogador */
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis; /* Adiciona "..." se o nome for muito longo */
-    }
-
-    input[type="number"] {
-        width: 40px; /* Inputs um pouco menores */
-    }
-}
-
-@media (max-width: 400px) {
-    .setup-grid {
-        flex-direction: column; /* Input em cima, botão embaixo */
-    }
-    
-    .btn-add {
-        width: 100%;
-    }
+.espectador-box {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+    text-align: center;
+    /* border: 1px dashed #f59e0b; */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
