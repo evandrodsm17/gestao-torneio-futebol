@@ -125,6 +125,10 @@ function salvar() {
 }
 
 function render() {
+
+  // 1. Salva a posição atual do scroll
+  const scrollPos = window.scrollY;
+
   // --- NOVA RENDERIZAÇÃO DE INSCRITOS (CARDS) ---
   const containerInscritos = document.getElementById("listaJogadores");
   containerInscritos.innerHTML = ""; // Limpa a área de listagem
@@ -221,9 +225,9 @@ function render() {
               <span class="nome-jogador">${jogo.casa.nome}</span>
             </div>
             <div class="placar-input-group">
-              <input type="number" value="${valA}" oninput="registrarPlacar('${keyA}', this.value)">
+              <input type="number" value="${valA}" onchange="registrarPlacar('${keyA}', this.value)">
               <span style="color: var(--border)">x</span>
-              <input type="number" value="${valB}" oninput="registrarPlacar('${keyB}', this.value)">
+              <input type="number" value="${valB}" onchange="registrarPlacar('${keyB}', this.value)">
             </div>
             <div class="time-container ${clB}" style="text-align:left">
               <img src="${jogo.fora.escudo}" class="escudo">
@@ -255,6 +259,9 @@ function render() {
 
   document.getElementById("rodadasHtml").innerHTML = html;
   calcularTabela();
+
+  // 2. Restaura a posição do scroll após a renderização
+  window.scrollTo(0, scrollPos);
 }
 
 // Função para remover jogador da lista de inscritos
