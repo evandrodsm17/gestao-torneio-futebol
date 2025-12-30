@@ -28,9 +28,23 @@ body {
   margin: 0 auto;
 }
 
+.logo-site {
+  max-width: 200px; /* Ajuste o tamanho conforme preferir */
+  height: auto;
+  margin-bottom: 0.5rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  /* Opcional: Adiciona um leve brilho para combinar com o tema dark */
+  filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.3));
+}
+
 header {
   text-align: center;
   margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 h1 {
@@ -97,24 +111,24 @@ button {
   color: #fefefe;
 }
 .btn-generate {
-  background: #186ab2;
+  background: #dd5211;
   color: #fff;
   width: 100%;
   margin-top: 10px;
   font-size: 1rem;
 }
 .btn-import {
-  background: #475569;
+  background: #051222;
   color: #fff;
   width: 100%;
   margin-top: 5px;
 }
 .btn-export {
-  background: #334155;
+  background: #4f5051;
   color: white;
 }
 .btn-reset {
-  background: var(--negative);
+  background: #a80a0a;
   color: white;
 }
 

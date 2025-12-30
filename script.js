@@ -30,6 +30,14 @@ let dados = JSON.parse(localStorage.getItem("csc_fc_v2")) || {
   config: { idaEVolta: false },
 };
 
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
 // --- FUNÇÕES DE SETUP ---
 function popularSelect() {
   const select = document.getElementById("clubSelect");
@@ -80,7 +88,10 @@ function gerarCampeonato() {
   const idaEVolta = document.getElementById("idaEVolta").checked;
   dados.config.idaEVolta = idaEVolta;
 
-  let participantes = [...dados.jogadores];
+  // --- MELHORIA 1: Embaralhar a lista de participantes antes de começar ---
+  // Isso evita que o primeiro jogador cadastrado seja sempre o "pivô" fixo
+  let participantes = shuffleArray([...dados.jogadores]);
+  
   if (participantes.length % 2 !== 0) {
     participantes.push({ nome: "FOLGA", clube: "FOLGA", escudo: "" });
   }
@@ -95,18 +106,32 @@ function gerarCampeonato() {
     for (let i = 0; i < n / 2; i++) {
       const casa = participantes[i];
       const fora = participantes[n - 1 - i];
-      jogos.push({ casa, fora });
+      
+      // --- MELHORIA 2: Alternar mando de campo aleatoriamente ---
+      if (Math.random() > 0.5) {
+        jogos.push({ casa, fora });
+      } else {
+        jogos.push({ casa: fora, fora: casa });
+      }
     }
-    dados.rodadas.push(jogos);
+    
+    // --- MELHORIA 3: Embaralhar a ordem dos jogos dentro da rodada ---
+    // Isso evita que o "Time X" seja sempre o primeiro jogo da lista
+    dados.rodadas.push(shuffleArray(jogos));
+    
     participantes.splice(1, 0, participantes.pop());
   }
 
-  // Adiciona o returno se solicitado
+  // --- MELHORIA 4: Embaralhar a ordem das rodadas ---
+  // Assim a "Rodada 1" não é previsível
+  dados.rodadas = shuffleArray(dados.rodadas);
+
   if (idaEVolta) {
     const returno = dados.rodadas.map((rodada) =>
       rodada.map((jogo) => ({ casa: jogo.fora, fora: jogo.casa }))
     );
-    dados.rodadas = [...dados.rodadas, ...returno];
+    // Opcional: Você pode embaralhar a ordem das rodadas do returno também
+    dados.rodadas = [...dados.rodadas, ...shuffleArray(returno)];
   }
 
   dados.ativo = true;
