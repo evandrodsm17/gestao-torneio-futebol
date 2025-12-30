@@ -106,6 +106,28 @@ button {
   transition: 0.2s;
 }
 
+/* Garante que todos os botões com ícone alinhem corretamente */
+.btn-generate, .btn-export, .btn-reset {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* Espaço entre o ícone e o texto */
+  cursor: pointer;
+  transition: transform 0.2s, background 0.3s;
+}
+
+/* Evita que o ícone fique "pulando" ao passar o mouse */
+button svg {
+  flex-shrink: 0;
+}
+
+.btn-export, .btn-print-rodada {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
 .btn-add {
   background: #02895c4d;
   border: 1px solid #02895c;

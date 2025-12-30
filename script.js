@@ -628,4 +628,71 @@ function voltarAoTopo() {
   });
 }
 
+// Função genérica para compartilhar imagem
+async function compartilharImagem(canvas, fileName) {
+  try {
+    const dataUrl = canvas.toDataURL("image/png");
+    const response = await fetch(dataUrl);
+    const blob = await response.blob();
+
+    // 1. Lógica para MOBILE (Compartilhamento Nativo)
+    if (navigator.share && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+      const file = new File([blob], fileName, { type: "image/png" });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+          title: 'Tabela FC',
+          text: 'Confira os resultados!',
+        });
+        return; // Finaliza aqui se for mobile
+      }
+    }
+
+    // 2. Lógica para PC (Copiar para a Área de Transferência)
+    if (navigator.clipboard && window.ClipboardItem) {
+      const item = new ClipboardItem({ "image/png": blob });
+      await navigator.clipboard.write([item]);
+      
+      // Feedback visual para o usuário
+      alert("✅ Imagem copiada para a área de transferência! Agora é só dar Ctrl+V no WhatsApp.");
+    } else {
+      // Fallback: Se tudo falhar, baixa a imagem
+      const link = document.createElement("a");
+      link.download = fileName;
+      link.href = dataUrl;
+      link.click();
+    }
+  } catch (err) {
+    console.error("Erro ao processar imagem:", err);
+    alert("Não foi possível copiar/compartilhar a imagem automaticamente.");
+  }
+}
+
+// Atualize a sua função compartilharTabela
+function compartilharTabela() {
+  const elemento = document.getElementById("tabelaParaImagem");
+  html2canvas(elemento, { backgroundColor: "#1e293b", scale: 2 }).then((canvas) => {
+    compartilharImagem(canvas, "classificacao_geral.png");
+  });
+}
+
+// Atualize a sua função printRodada
+function printRodada(index) {
+  const elemento = document.getElementById(`card-rodada-${index}`);
+  const btn = elemento.querySelector(".btn-print-rodada");
+
+  btn.style.opacity = "0";
+  elemento.classList.add("card-print-fix");
+
+  html2canvas(elemento, {
+    backgroundColor: "#1e293b",
+    scale: 3,
+    useCORS: true,
+  }).then((canvas) => {
+    compartilharImagem(canvas, `Rodada_${index + 1}.png`);
+    btn.style.opacity = "1";
+    elemento.classList.remove("card-print-fix");
+  });
+}
+
 document.addEventListener("DOMContentLoaded", render);
