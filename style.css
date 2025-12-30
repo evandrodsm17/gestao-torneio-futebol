@@ -298,7 +298,10 @@ td {
   th:nth-child(5), td:nth-child(5), /* V */
     th:nth-child(6), td:nth-child(6), /* E */
     th:nth-child(7), td:nth-child(7), /* D */
-    th:nth-child(9), td:nth-child(9)  /* Forma */ {
+    th:nth-child(8), td:nth-child(8), /* SG */
+    th:nth-child(9), td:nth-child(9), /* SG */
+    th:nth-child(11), td:nth-child(11)  /* Forma */
+     {
     display: none;
   }
 
@@ -431,7 +434,7 @@ input[type="number"] {
   z-index: 99;
   border: none;
   outline: none;
-  background: #10b98135;
+  background: #5e6d676a;
   color: white;
   cursor: pointer;
   padding: 15px;
@@ -443,7 +446,7 @@ input[type="number"] {
 }
 
 #btnTopo:hover {
-  background: #10b9817d;
+  background: #7a807e7d;
   transform: scale(1.05);
 }
 
