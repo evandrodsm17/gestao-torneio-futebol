@@ -429,7 +429,7 @@ function exibirCampeao(campeao) {
 
 // --- UTILITÁRIOS ---
 function resetarTudo() {
-  if (confirm("Resetar campeonato?")) {
+  if (confirm("⚠️ Resetar campeonato? esta ação é irreversível.")) {
     localStorage.removeItem("csc_fc_v2");
     location.reload();
   }

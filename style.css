@@ -101,27 +101,49 @@ button {
   padding: 10px 20px;
   border-radius: 8px;
   border: none;
-  font-weight: bold;
+  font-weight: 600;
   cursor: pointer;
   transition: 0.2s;
 }
 
 .btn-add {
-  background: #02895c;
+  background: #02895c4d;
+  border: 1px solid #02895c;
   color: #fefefe;
 }
+
+.btn-add:hover {
+  background: #02895cbd;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
 .btn-generate {
-  background: #dd5211;
+  background: #dd521164;
+  border: 1px solid #dd5211;
   color: #fff;
   width: 100%;
   margin-top: 10px;
-  font-size: 1rem;
 }
+
+.btn-generate:hover {
+  background: #d94907a2;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
 .btn-import {
-  background: #051222;
+  background: #02678930;
+  border: 1px solid #025a89;
   color: #fff;
   width: 100%;
   margin-top: 5px;
+}
+
+.btn-import:hover {
+  background: #0267897d;
+  color: #fff;
+  transform: translateY(-1px);
 }
 
 .btn-export {
