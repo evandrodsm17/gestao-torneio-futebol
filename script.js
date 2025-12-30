@@ -79,6 +79,15 @@ function addJogador() {
   inputNome.value = "";
   selectClube.value = "";
   salvar();
+
+  inputNome.focus();
+}
+
+function irParaTabela() {
+  const tabela = document.getElementById("tabelaParaImagem");
+  if (tabela) {
+    tabela.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 }
 
 function gerarCampeonato() {
@@ -554,6 +563,28 @@ function printRodada(index) {
     // 2. Restaurar estado original
     btn.style.opacity = "1";
     elemento.classList.remove("card-print-fix");
+  });
+}
+
+// --- FUNÇÃO VOLTAR AO TOPO ---
+window.onscroll = function() {
+  mostrarBotaoTopo();
+};
+
+function mostrarBotaoTopo() {
+  const btn = document.getElementById("btnTopo");
+  // Se rolar mais de 300px para baixo, o botão aparece
+  if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+    btn.style.display = "block";
+  } else {
+    btn.style.display = "none";
+  }
+}
+
+function voltarAoTopo() {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
   });
 }
 

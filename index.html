@@ -10,7 +10,11 @@
   <body>
     <div class="container">
       <header>
-        <img src="./escudos/logoArena.png" alt="Arena Score FC" class="logo-site" />
+        <img
+          src="./escudos/logoArena.png"
+          alt="Arena Score FC"
+          class="logo-site"
+        />
         <p style="color: var(--text-dim)">Gestão de Torneio Profissional</p>
       </header>
 
@@ -37,13 +41,13 @@
         ></div>
 
         <button class="btn-generate" onclick="gerarCampeonato()">
-          ⚡ GERAR CAMPEONATO
+          ⚡ GERAR TORNEIO
         </button>
         <button
           class="btn-import"
           onclick="document.getElementById('importFile').click()"
         >
-          📥 IMPORTAR BACKUP
+          📥 IMPORTAR TORNEIO
         </button>
         <input
           type="file"
@@ -55,13 +59,16 @@
       </div>
 
       <div id="campeonatoArea" style="display: none">
-        <div class="card" style="margin-bottom: 1rem">
+        <div class="card search-container">
           <input
             type="text"
             id="searchClub"
             placeholder="🔍 Pesquisar clube ou jogador..."
             oninput="render()"
           />
+          <button class="btn-import btn-ver-tabela" onclick="irParaTabela()">
+            📊 Tabela
+          </button>
         </div>
         <div class="rodadas-grid" id="rodadasHtml"></div>
 
@@ -110,9 +117,14 @@
             📸 COMPARTILHAR TABELA
           </button>
           <button class="btn-export" onclick="exportarJSON()">
-            💾 SALVAR BACKUP
+            💾 SALVAR TORNEIO
           </button>
-          <button class="btn-reset" onclick="resetarTudo()">⚠️ ZERAR TUDO</button>
+          <button class="btn-reset" onclick="resetarTudo()">
+            ⚠️ ZERAR TUDO
+          </button>
+          <button id="btnTopo" onclick="voltarAoTopo()" title="Voltar ao topo">
+            ↑
+          </button>
         </div>
       </div>
     </div>
