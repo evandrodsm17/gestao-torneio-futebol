@@ -123,13 +123,29 @@ button {
   width: 100%;
   margin-top: 5px;
 }
+
 .btn-export {
-  background: #4f5051;
-  color: white;
+  background: #ec7f0330;
+  border: 1px solid #ec7f03;
+  color: #fff;
 }
+
+.btn-export:hover {
+  background: #ec7f037d;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
 .btn-reset {
-  background: #a80a0a;
-  color: white;
+  border: 1px solid #a80a0a;
+  color: #fff;
+  background: #ec030330;
+}
+
+.btn-reset:hover {
+  background: #ec03037d;
+  color: #fff;
+  transform: translateY(-1px);
 }
 
 /* Rodadas e Jogos */
@@ -370,7 +386,8 @@ input[type="number"] {
 }
 
 .btn-print-rodada:hover {
-  background: var(--bg-body);
+  background: #ec7f0330;
+  border: 1px solid #ec7f03;
   color: #fff;
   transform: translateY(-1px);
 }
