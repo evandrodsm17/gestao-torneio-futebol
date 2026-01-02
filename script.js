@@ -135,6 +135,22 @@ function shuffleArray(array) {
 
 // --- FUNÇÕES DE SETUP ---
 function popularSelect() {
+  const selectFormato = document.getElementById("formatoTorneio");
+  const containerCheck = document.getElementById("containerIdaEVolta");
+
+  if (selectFormato) {
+    selectFormato.addEventListener("change", function () {
+      if (this.value === "MATA_MATA") {
+        // Esconde a opção de Ida e Volta
+        containerCheck.style.display = "none";
+        // Garante que o valor seja falso internamente
+        document.getElementById("idaEVolta").checked = false;
+      } else {
+        // Mostra novamente para o modo Liga
+        containerCheck.style.display = "block";
+      }
+    });
+  }
   const select = document.getElementById("clubSelect");
   const tipo = document.getElementById("tipoCampeonato").value;
   if (!select) return;
@@ -207,60 +223,178 @@ function irParaTabela() {
 }
 
 function gerarCampeonato() {
-  if (dados.jogadores.length < 2)
-    return alert("Adicione pelo menos 2 jogadores.");
+  const numJogadores = dados.jogadores.length;
 
+  if (numJogadores < 2) return alert("Adicione pelo menos 2 jogadores.");
+
+  // Captura as opções do HTML
+  const formatoElement = document.getElementById("formatoTorneio");
+  const formato = formatoElement ? formatoElement.value : "LIGA";
   const idaEVolta = document.getElementById("idaEVolta").checked;
-  dados.config.idaEVolta = idaEVolta;
 
-  // --- MELHORIA 1: Embaralhar a lista de participantes antes de começar ---
-  // Isso evita que o primeiro jogador cadastrado seja sempre o "pivô" fixo
-  let participantes = shuffleArray([...dados.jogadores]);
+  if (formato === "MATA_MATA") {
+    const ehPotenciaDeDois = (n) => n > 0 && (n & (n - 1)) === 0;
 
-  if (participantes.length % 2 !== 0) {
-    participantes.push({ nome: "FOLGA", clube: "FOLGA", escudo: "" });
+    if (!ehPotenciaDeDois(numJogadores)) {
+      alert(
+        `Para um Mata-Mata perfeito, use 2, 4, 8, 16 ou 32 equipes.\n\nAtualmente você tem ${numJogadores}. Adicione ou remova equipes para continuar.`
+      );
+      return; // Interrompe a criação
+    }
   }
 
-  const n = participantes.length;
-  dados.rodadas = [];
+  dados.config.formato = formato;
+  dados.config.idaEVolta = idaEVolta;
   dados.placares = {};
 
-  // Algoritmo Round Robin
-  for (let r = 0; r < n - 1; r++) {
-    let jogos = [];
-    for (let i = 0; i < n / 2; i++) {
-      const casa = participantes[i];
-      const fora = participantes[n - 1 - i];
+  let participantes = shuffleArray([...dados.jogadores]);
 
-      // --- MELHORIA 2: Alternar mando de campo aleatoriamente ---
-      if (Math.random() > 0.5) {
-        jogos.push({ casa, fora });
-      } else {
-        jogos.push({ casa: fora, fora: casa });
-      }
+  if (formato === "LIGA") {
+    // === SEU CÓDIGO ORIGINAL DE LIGA (ROUND ROBIN) - MANTIDO INTEGRALMENTE ===
+    if (participantes.length % 2 !== 0) {
+      participantes.push({ nome: "FOLGA", clube: "FOLGA", escudo: "" });
     }
 
-    // --- MELHORIA 3: Embaralhar a ordem dos jogos dentro da rodada ---
-    // Isso evita que o "Time X" seja sempre o primeiro jogo da lista
-    dados.rodadas.push(shuffleArray(jogos));
+    const n = participantes.length;
+    dados.rodadas = [];
 
-    participantes.splice(1, 0, participantes.pop());
-  }
+    for (let r = 0; r < n - 1; r++) {
+      let jogos = [];
+      for (let i = 0; i < n / 2; i++) {
+        const casa = participantes[i];
+        const fora = participantes[n - 1 - i];
 
-  // --- MELHORIA 4: Embaralhar a ordem das rodadas ---
-  // Assim a "Rodada 1" não é previsível
-  dados.rodadas = shuffleArray(dados.rodadas);
+        if (Math.random() > 0.5) {
+          jogos.push({ casa, fora });
+        } else {
+          jogos.push({ casa: fora, fora: casa });
+        }
+      }
+      dados.rodadas.push(shuffleArray(jogos));
+      participantes.splice(1, 0, participantes.pop());
+    }
 
-  if (idaEVolta) {
-    const returno = dados.rodadas.map((rodada) =>
-      rodada.map((jogo) => ({ casa: jogo.fora, fora: jogo.casa }))
-    );
-    // Opcional: Você pode embaralhar a ordem das rodadas do returno também
-    dados.rodadas = [...dados.rodadas, ...shuffleArray(returno)];
+    dados.rodadas = shuffleArray(dados.rodadas);
+
+    if (idaEVolta) {
+      const returno = dados.rodadas.map((rodada) =>
+        rodada.map((jogo) => ({ casa: jogo.fora, fora: jogo.casa }))
+      );
+      dados.rodadas = [...dados.rodadas, ...shuffleArray(returno)];
+    }
+    // === FIM DO SEU CÓDIGO DE LIGA ===
+  } else {
+    // === NOVO MODO: MATA-MATA DIRETO (JOGO ÚNICO) ===
+    let jogosMataMata = [];
+
+    for (let i = 0; i < participantes.length; i += 2) {
+      if (participantes[i + 1]) {
+        jogosMataMata.push({
+          casa: participantes[i],
+          fora: participantes[i + 1],
+        });
+      } else {
+        jogosMataMata.push({
+          casa: participantes[i],
+          fora: {
+            nome: "SISTEMA",
+            clube: "AVANÇA DIRETO",
+            escudo: "./escudos/logoArena.png",
+            isBye: true,
+          },
+        });
+      }
+    }
+    // No Mata-Mata de jogo único, sempre teremos apenas 1 card inicial
+    dados.rodadas = [jogosMataMata];
   }
 
   dados.ativo = true;
   salvar();
+  render(); // Adicionei o render() aqui para garantir que a tela atualize
+}
+
+function proximaFaseMataMata() {
+  const ultimaRodadaIndex = dados.rodadas.length - 1;
+  const ultimaRodada = dados.rodadas[ultimaRodadaIndex];
+  const vencedores = [];
+
+  // 1. Validar se todos os jogos têm resultado
+  for (let ji = 0; ji < ultimaRodada.length; ji++) {
+    const valA = dados.placares[`r${ultimaRodadaIndex}j${ji}a`];
+    const valB = dados.placares[`r${ultimaRodadaIndex}j${ji}b`];
+
+    // Se o time avançou direto (BYE), ele vence automaticamente
+    if (ultimaRodada[ji].fora && ultimaRodada[ji].fora.isBye) {
+      vencedores.push(ultimaRodada[ji].casa);
+      continue;
+    }
+
+    if (
+      valA === "" ||
+      valB === "" ||
+      valA === undefined ||
+      valB === undefined
+    ) {
+      alert("Por favor, preencha todos os placares antes de avançar!");
+      return;
+    }
+
+    const gA = parseInt(valA);
+    const gB = parseInt(valB);
+
+    if (gA > gB) {
+      vencedores.push(ultimaRodada[ji].casa);
+    } else if (gB > gA) {
+      vencedores.push(ultimaRodada[ji].fora);
+    } else {
+      alert(
+        "Empate detectado! No Mata-Mata de jogo único, alguém precisa vencer. Decida nos pênaltis!"
+      );
+      return;
+    }
+  }
+
+  // 2. Se sobrou apenas 1, temos o grande campeão
+  if (vencedores.length === 1) {
+    exibirCampeao(vencedores[0]);
+    return;
+  }
+
+  // 3. Montar a próxima fase com os vencedores
+  let novosJogos = [];
+  for (let i = 0; i < vencedores.length; i += 2) {
+    if (vencedores[i + 1]) {
+      novosJogos.push({ casa: vencedores[i], fora: vencedores[i + 1] });
+    } else {
+      novosJogos.push({
+        casa: vencedores[i],
+        fora: {
+          nome: "SISTEMA",
+          clube: "AVANÇA DIRETO",
+          escudo: "./escudos/logoArena.png",
+          isBye: true,
+        },
+      });
+    }
+  }
+
+  dados.rodadas.push(novosJogos);
+  salvar();
+  render();
+
+  // Scroll para ver a nova fase
+  setTimeout(() => {
+    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+  }, 300);
+}
+
+function getNomeFase(numJogos) {
+  if (numJogos === 1) return "GRANDE FINAL";
+  if (numJogos === 2) return "SEMIFINAIS";
+  if (numJogos === 4) return "QUARTAS DE FINAL";
+  if (numJogos === 8) return "OITAVAS DE FINAL";
+  return `FASE DE ${numJogos * 2} EQUIPES`;
 }
 
 // --- LÓGICA DE JOGO ---
@@ -279,7 +413,7 @@ function render() {
   const searchTerm =
     document.getElementById("searchClub")?.value.toLowerCase() || "";
 
-  // --- RENDERIZAÇÃO DE INSCRITOS ---
+  // --- RENDERIZAÇÃO DE INSCRITOS --- (Mantida exatamente igual)
   const containerInscritos = document.getElementById("listaJogadores");
   if (containerInscritos) {
     containerInscritos.innerHTML = "";
@@ -312,6 +446,20 @@ function render() {
   document.getElementById("setupArea").style.display = "none";
   document.getElementById("campeonatoArea").style.display = "block";
 
+  // --- CONTROLE DE VISIBILIDADE DA TABELA ---
+  // Se for MATA_MATA, escondemos o card da tabela e o botão de exportar tabela
+  const areaTabelaVisual = document.getElementById("tabelaParaImagem");
+  if (dados.config.formato === "MATA_MATA") {
+    if (areaTabelaVisual)
+      areaTabelaVisual.closest(".card").style.display = "none";
+    // Esconder botões de ver tabela se existirem
+    const btnVerTabela = document.querySelector(".btn-ver-tabela");
+    if (btnVerTabela) btnVerTabela.style.display = "none";
+  } else {
+    if (areaTabelaVisual)
+      areaTabelaVisual.closest(".card").style.display = "block";
+  }
+
   // --- RENDERIZAÇÃO DE RODADAS COM FILTRO ---
   let html = "";
   dados.rodadas.forEach((rodada, ri) => {
@@ -325,7 +473,6 @@ function render() {
       const nomeFora = jogo.fora.nome.toLowerCase();
       const clubeFora = jogo.fora.clube.toLowerCase();
 
-      // Lógica de Filtro
       const matchSearch =
         nomeCasa.includes(searchTerm) ||
         clubeCasa.includes(searchTerm) ||
@@ -385,32 +532,47 @@ function render() {
     });
 
     if (temJogoVisivel) {
-      // Localize onde o cabeçalho da rodada é gerado e substitua por este:
+      // Definimos o título da rodada (Se for mata-mata, podemos futuramente mudar de "Rodada" para "Fase")
+      const nomeDaFase = getNomeFase(rodada.length);
+      const tituloRodada =
+        dados.config.formato === "MATA_MATA" ? nomeDaFase : `RODADA ${ri + 1}`;
+
       html += `
-  <div class="card" id="card-rodada-${ri}">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px">
-      <h4 style="color:var(--text-dim); margin:0">RODADA ${ri + 1}</h4>
-      <button class="btn-print-rodada" onclick="printRodada(${ri})">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z" />
-          <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z" />
-        </svg>
-        Compartilhar
-      </button>
-    </div>
-    ${
-      espectador
-        ? `<div class="espectador-box"><strong>Espectador:</strong> ${espectador}</div>`
-        : ""
-    }
-    ${jogosHtml}
-  </div>`;
+        <div class="card" id="card-rodada-${ri}">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px">
+            <h4 style="color:var(--text-dim); margin:0">${tituloRodada}</h4>
+            <button class="btn-print-rodada" onclick="printRodada(${ri})">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z" />
+              </svg>
+              Compartilhar
+            </button>
+          </div>
+          ${
+            espectador
+              ? `<div class="espectador-box"><strong>Espectador:</strong> ${espectador}</div>`
+              : ""
+          }
+          ${jogosHtml}
+          
+          ${
+            dados.config.formato === "MATA_MATA" &&
+            ri === dados.rodadas.length - 1
+              ? `<button class="btn-primary" onclick="proximaFaseMataMata()" style="width:100%; margin-top:15px; background:var(--green-button-bg)">
+              AVANÇAR PARA PRÓXIMA FASE
+             </button>`
+              : ""
+          }
+        </div>`;
     }
   });
 
   document.getElementById("rodadasHtml").innerHTML =
     html ||
     "<p style='text-align:center; color:var(--text-dim)'>Nenhum jogo encontrado para esta busca.</p>";
+
+  // Chamamos a calcularTabela (que já tem a proteção que fizemos antes)
   calcularTabela();
   window.scrollTo(0, scrollPos);
 }
@@ -423,6 +585,13 @@ function removerJogador(index) {
 
 // --- CÁLCULO E CLASSIFICAÇÃO ---
 function calcularTabela() {
+  // --- PROTEÇÃO PARA MATA-MATA ---
+  if (dados.config && dados.config.formato === "MATA_MATA") {
+    const corpoTabela = document.getElementById("corpoTabela");
+    if (corpoTabela) corpoTabela.innerHTML = "";
+    return;
+  }
+
   const s = {};
   dados.jogadores.forEach((j) => {
     s[j.nome] = {
@@ -442,7 +611,7 @@ function calcularTabela() {
 
   dados.rodadas.forEach((rodada, ri) => {
     rodada.forEach((jogo, ji) => {
-      if (jogo.casa.nome === "FOLGA" || jogo.fora.nome === "FOLGA") return;
+      if (!jogo.casa || !jogo.fora || jogo.casa.nome === "FOLGA" || jogo.fora.nome === "FOLGA") return;
 
       const ga = parseInt(dados.placares[`r${ri}j${ji}a`]);
       const gb = parseInt(dados.placares[`r${ri}j${ji}b`]);
@@ -452,6 +621,8 @@ function calcularTabela() {
       const pA = s[jogo.casa.nome];
       const pB = s[jogo.fora.nome];
 
+      if (!pA || !pB) return;
+
       pA.j++;
       pB.j++;
       pA.gp += ga;
@@ -460,38 +631,29 @@ function calcularTabela() {
       pB.gc += ga;
 
       if (ga > gb) {
-        pA.pts += 3;
-        pA.v++;
-        pA.ultimos.push("v");
-        pB.d++;
-        pB.ultimos.push("d");
+        pA.pts += 3; pA.v++; pA.ultimos.push("v");
+        pB.d++; pB.ultimos.push("d");
       } else if (gb > ga) {
-        pB.pts += 3;
-        pB.v++;
-        pB.ultimos.push("v");
-        pA.d++;
-        pA.ultimos.push("d");
+        pB.pts += 3; pB.v++; pB.ultimos.push("v");
+        pA.d++; pA.ultimos.push("d");
       } else {
-        pA.pts += 1;
-        pA.e++;
-        pA.ultimos.push("e");
-        pB.pts += 1;
-        pB.e++;
-        pB.ultimos.push("e");
+        pA.pts += 1; pA.e++; pA.ultimos.push("e");
+        pB.pts += 1; pB.e++; pB.ultimos.push("e");
       }
     });
   });
 
   const ranking = Object.values(s).sort(
-    (a, b) => b.pts - a.pts || b.gp - b.gc - (a.gp - a.gc) || b.gp - a.gp
+    (a, b) => b.pts - a.pts || (b.gp - b.gc) - (a.gp - a.gc) || b.gp - a.gp
   );
 
-  // Verifica se o campeonato acabou para mostrar campeão
-  const totalJogosEsperados =
-    (dados.jogadores.length % 2 === 0
-      ? dados.jogadores.length - 1
-      : dados.jogadores.length) * (dados.config.idaEVolta ? 2 : 1);
-  const campeonatoFinalizado = ranking.every(
+  // --- CORREÇÃO DA LÓGICA DE FINALIZAÇÃO ---
+  // O número de jogos que cada um faz é sempre (Total de Participantes Real - 1)
+  // Se tenho 5 jogadores, cada um faz 4 jogos.
+  const nParticipantes = dados.jogadores.length;
+  const totalJogosEsperados = (nParticipantes - 1) * (dados.config.idaEVolta ? 2 : 1);
+
+  const campeonatoFinalizado = ranking.length > 0 && ranking.every(
     (p) => p.j === totalJogosEsperados
   );
 
@@ -518,12 +680,8 @@ function calcularTabela() {
             <div style="display:flex; align-items:center; gap:8px">
                 <img src="${t.escudo}" width="20">
                 <div>
-                    <div style="font-weight:bold; font-size:0.85rem">${
-                      t.clube
-                    }</div>
-                    <div style="font-size:0.65rem; color:var(--text-dim)">${
-                      t.nome
-                    }</div>
+                    <div style="font-weight:bold; font-size:0.85rem">${t.clube}</div>
+                    <div style="font-size:0.65rem; color:var(--text-dim)">${t.nome}</div>
                 </div>
             </div>
           </td>
@@ -563,7 +721,9 @@ function resetarTudo() {
 // Função para capturar a tabela como imagem (necessita da lib html2canvas no HTML)
 function compartilharTabela() {
   const elemento = document.getElementById("tabelaParaImagem");
-  const currentBg = getComputedStyle(document.documentElement).getPropertyValue('--bg-card').trim();
+  const currentBg = getComputedStyle(document.documentElement)
+    .getPropertyValue("--bg-card")
+    .trim();
   html2canvas(elemento, { backgroundColor: currentBg, scale: 2 }).then(
     (canvas) => {
       const link = document.createElement("a");
@@ -665,7 +825,7 @@ function printRodada(index) {
 
   // 1. Preparar para o print
   btn.style.opacity = "0";
-  
+
   // Só aplicamos a correção visual forçada se NÃO estivermos no modo claro
   if (!isLightMode) {
     elemento.classList.add("card-print-fix");
@@ -680,7 +840,7 @@ function printRodada(index) {
     useCORS: true,
   }).then((canvas) => {
     compartilharImagem(canvas, `Rodada_${index + 1}.png`);
-    
+
     // 2. Restaurar estado original
     btn.style.opacity = "1";
     elemento.classList.remove("card-print-fix");
@@ -760,15 +920,15 @@ async function compartilharImagem(canvas, fileName) {
 // Atualize a sua função compartilharTabela
 function compartilharTabela() {
   const elemento = document.getElementById("tabelaParaImagem");
-  
+
   // Captura as cores reais definidas no CSS (seja light ou dark mode)
   const estiloComputado = getComputedStyle(document.documentElement);
-  const bgColor = estiloComputado.getPropertyValue('--bg-card').trim();
+  const bgColor = estiloComputado.getPropertyValue("--bg-card").trim();
 
-  html2canvas(elemento, { 
-    backgroundColor: bgColor, 
+  html2canvas(elemento, {
+    backgroundColor: bgColor,
     scale: 2,
-    useCORS: true 
+    useCORS: true,
   }).then((canvas) => {
     compartilharImagem(canvas, "classificacao_geral.png");
   });

@@ -67,6 +67,10 @@
           <label style="display: block; margin-bottom: 8px; font-size: 0.8rem"
             >TIPO DE CAMPEONATO:</label
           >
+          <select id="formatoTorneio">
+            <option value="LIGA">🏆 PONTOS CORRIDOS (LIGA)</option>
+            <option value="MATA_MATA">⚖️ MATA-MATA DIRETO</option>
+          </select>
           <select id="tipoCampeonato" onchange="popularSelect()">
             <option value="BRASILEIRAO">🇧🇷 BRASILEIRÃO</option>
             <option value="CHAMPIONS">🇪🇺 CHAMPIONS LEAGUE</option>
@@ -79,7 +83,7 @@
           <button class="btn-add" onclick="addJogador()">ADICIONAR</button>
         </div>
 
-        <div class="config-campeonato">
+        <div class="config-campeonato" id="containerIdaEVolta">
           <label class="checkbox-container">
             <input type="checkbox" id="idaEVolta" />
             <span>Incluir Turno e Returno (Ida e Volta)</span>
@@ -94,7 +98,7 @@
         <button class="btn-generate" onclick="gerarCampeonato()">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            fill=var(--green-button-text)
+            fill="var(--green-button-text)"
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
@@ -195,7 +199,11 @@
           <button
             class="btn-export"
             onclick="compartilharTabela()"
-            style="background: var(--green-button-bg); color: var(--green-button-text); border: 1px solid var(--green-button-bg);"
+            style="
+              background: var(--green-button-bg);
+              color: var(--green-button-text);
+              border: 1px solid var(--green-button-bg);
+            "
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
