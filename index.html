@@ -20,6 +20,41 @@
             <span class="brand-name">BIG EV SCORE</span>
           </div>
           <p class="tagline">| Gestão de Torneio Profissional</p>
+
+          <div class="theme-switch-wrapper">
+            <span style="font-size: 14px; margin-right: 8px">🌙</span>
+            <label
+              class="theme-switch"
+              for="checkbox"
+              style="
+                position: relative;
+                display: inline-block;
+                width: 40px;
+                height: 20px;
+              "
+            >
+              <input
+                type="checkbox"
+                id="checkbox"
+                style="opacity: 0; width: 0; height: 0"
+              />
+              <span
+                class="slider round"
+                style="
+                  position: absolute;
+                  cursor: pointer;
+                  top: 0;
+                  left: 0;
+                  right: 0;
+                  bottom: 0;
+                  background-color: var(--text-dim);
+                  transition: 0.4s;
+                  border-radius: 34px;
+                "
+              ></span>
+            </label>
+            <span style="font-size: 14px; margin-left: 8px">☀️</span>
+          </div>
         </div>
       </header>
 
@@ -29,18 +64,13 @@
         <h3>🎮 Configuração do Torneio</h3>
 
         <div class="config-campeonato" style="margin-bottom: 20px">
-          <label
-            style="
-              display: block;
-              margin-bottom: 8px;
-              font-size: 0.8rem;
-              color: var(--primary);
-            "
+          <label style="display: block; margin-bottom: 8px; font-size: 0.8rem"
             >TIPO DE CAMPEONATO:</label
           >
           <select id="tipoCampeonato" onchange="popularSelect()">
             <option value="BRASILEIRAO">🇧🇷 BRASILEIRÃO</option>
             <option value="CHAMPIONS">🇪🇺 CHAMPIONS LEAGUE</option>
+            <option value="SELECOES">COPA DO MUNDO</option>
           </select>
         </div>
         <div class="setup-grid">
@@ -64,7 +94,7 @@
         <button class="btn-generate" onclick="gerarCampeonato()">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            fill="none"
+            fill="#02473f"
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
@@ -76,7 +106,7 @@
               d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z"
             />
           </svg>
-          GERAR TORNEIO
+          GERAR
         </button>
         <button
           class="btn-import"
@@ -96,7 +126,7 @@
               d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5"
             />
           </svg>
-          IMPORTAR TORNEIO
+          IMPORTAR
         </button>
         <input
           type="file"
@@ -112,11 +142,11 @@
           <input
             type="text"
             id="searchClub"
-            placeholder="🔍 Pesquisar clube ou jogador..."
+            placeholder="Pesquisar clube ou jogador..."
             oninput="render()"
           />
           <button class="btn-import btn-ver-tabela" onclick="irParaTabela()">
-            📊 Tabela
+            📊 Ver Tabela
           </button>
         </div>
         <div class="rodadas-grid" id="rodadasHtml"></div>
@@ -165,7 +195,7 @@
           <button
             class="btn-export"
             onclick="compartilharTabela()"
-            style="background: #25d36630; border-color: #25d366"
+            style="background: var(--green-button-bg); color: var(--green-button-text); border: 1px solid var(--green-button-bg);"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

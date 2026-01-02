@@ -1,15 +1,41 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
 
+/* --- TEMA PADRÃO (ESCURO) --- */
 :root {
-  --bg-body: #0f172a;
-  --bg-card: #1e293b;
+  --bg-body: #032824;
+  --bg-card: #02473f;
+  --bg-input: #032824;
+  --bg-jogo: #0277669c; /* Cor dos cards de jogos */
   --text-main: #f8fafc;
-  --text-dim: #94a3b8;
-  --primary: #38bdf8;
+  --text-dim: #f9f47c;
+  --primary: #d9f745;
   --positive: #10b981;
   --negative: #ef4444;
-  --border: #334155;
+  --border: #03221e;
   --warning: #f59e0b;
+  --shadow: rgba(0, 0, 0, 0.3);
+  --blue-button-bg: #0e53c2;
+  --blue-button-text: #f8fafc;
+  --red-button-bg: #c20e0e;
+  --red-button-text: #f8fafc;
+  --green-button-bg: #068a36;
+  --green-button-text: #f8fafc;
+}
+
+/* --- TEMA CLARO (SUAVE/OFF-WHITE) --- */
+:root.light-mode {
+  --bg-body: #f1f5f9; /* Cinza azulado bem clarinho */
+  --bg-card: #ffffff; /* Branco para os cards */
+  --bg-input: #f8fafc; /* Fundo dos inputs */
+  --bg-jogo: #f1f5f9; /* Fundo dos jogos no modo claro */
+  --text-main: #0f172a; /* Azul marinho quase preto para leitura */
+  --text-dim: #64748b; /* Cinza para textos secundários */
+  --primary: #02473f; /* Invertemos: o verde vira a cor de destaque */
+  --positive: #059669;
+  --negative: #dc2626;
+  --border: #e2e8f0; /* Bordas sutis */
+  --warning: #d97706;
+  --shadow: rgba(0, 0, 0, 0.05);
 }
 
 * {
@@ -80,7 +106,7 @@ header.navbar {
   .tagline {
     display: none; /* Esconde o texto secundário em telas pequenas */
   }
-  
+
   .nav-container {
     justify-content: center;
   }
@@ -90,8 +116,6 @@ header.navbar {
   max-width: 950px;
   margin: 0 auto;
 }
-
-
 
 header {
   text-align: center;
@@ -111,6 +135,7 @@ h1 {
 .card {
   background: var(--bg-card);
   border: 1px solid var(--border);
+  box-shadow: 0 4px 6px var(--shadow);
   border-radius: 12px;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
@@ -142,9 +167,9 @@ h1 {
 input[type="text"],
 select {
   flex: 1;
-  background: #0f172a;
+  background: var(--bg-body);
   border: 1px solid var(--border);
-  color: white;
+  color: var(--text-main);
   padding: 12px;
   border-radius: 8px;
   outline: none;
@@ -161,7 +186,9 @@ button {
 }
 
 /* Garante que todos os botões com ícone alinhem corretamente */
-.btn-generate, .btn-export, .btn-reset {
+.btn-generate,
+.btn-export,
+.btn-reset {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -175,7 +202,8 @@ button svg {
   flex-shrink: 0;
 }
 
-.btn-export, .btn-print-rodada {
+.btn-export,
+.btn-print-rodada {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -183,67 +211,60 @@ button svg {
 }
 
 .btn-add {
-  background: #02895c4d;
-  border: 1px solid #02895c;
-  color: #fefefe;
+  background: var(--bg-jogo);
+  border: 1px solid var(--bg-jogo);
+  color: var(--text-main);
 }
 
 .btn-add:hover {
-  background: #02895cbd;
-  color: #fff;
+  background: var(--positive);
+  border: 1px solid var(--positive);
   transform: translateY(-1px);
 }
 
 .btn-generate {
-  background: #dd521164;
-  border: 1px solid #dd5211;
-  color: #fff;
+  background: var(--bg-card);
+  border: 1px solid var(--primary);
+  color: var(--text-main);
   width: 100%;
   margin-top: 10px;
 }
 
 .btn-generate:hover {
-  background: #d94907a2;
-  color: #fff;
-  transform: translateY(-1px);
+  transform: translatex(3px);
 }
 
 .btn-import {
-  background: #02678930;
-  border: 1px solid #025a89;
-  color: #fff;
+  background: var(--primary);
+  border: 1px solid var(--primary);
+  color: var(--text-main);
+  border: none;
   width: 100%;
-  margin-top: 5px;
+  margin-top: 10px;
 }
 
 .btn-import:hover {
-  background: #0267897d;
-  color: #fff;
-  transform: translateY(-1px);
+  transform: translatex(3px);
 }
 
 .btn-export {
-  background: #ec7f0330;
-  border: 1px solid #ec7f03;
-  color: #fff;
+  background: var(--blue-button-bg);
+  border: 1px solid var(--blue-button-bg);
+  color: var(--blue-button-text);
 }
 
 .btn-export:hover {
-  background: #ec7f037d;
-  color: #fff;
-  transform: translateY(-1px);
+  transform: translateY(-3px);
 }
 
 .btn-reset {
-  border: 1px solid #a80a0a;
-  color: #fff;
-  background: #ec030330;
+  background: var(--red-button-bg);
+  border: 2px solid var(--red-button-bg);
+  color: var(--red-button-text);
 }
 
 .btn-reset:hover {
-  background: #ec03037d;
-  color: #fff;
-  transform: translateY(-1px);
+  transform: translateY(-3px);
 }
 
 /* Rodadas e Jogos */
@@ -261,7 +282,7 @@ button svg {
   margin-bottom: 0.8rem;
   padding: 4px;
   border-radius: 8px;
-  background: rgba(15, 23, 42, 0.5);
+  background: var(--bg-jogo); /* Antes era fixo #0277669c */
 }
 
 .time-container {
@@ -282,13 +303,14 @@ button svg {
 }
 
 .time-label {
-  font-size: 0.8rem;
-  font-weight: bold;
+  font-size: 0.9rem;
+  font-weight: 500;
   text-align: center;
 }
 
 .nome-jogador {
   font-size: 0.65rem;
+  font-weight: 400;
   color: var(--text-dim);
 }
 
@@ -300,9 +322,9 @@ button svg {
 
 input[type="number"] {
   width: 45px;
-  background: var(--bg-body);
+  background: var(--bg-body); /* Segue o tema */
   border: 1px solid var(--border);
-  color: white;
+  color: var(--text-main); /* Texto fica escuro no claro */
   padding: 8px 4px;
   text-align: center;
   border-radius: 6px;
@@ -311,15 +333,21 @@ input[type="number"] {
 
 /* Cores de Resultado dinâmicas */
 .vitoria {
-  background-color: rgba(16, 185, 129, 0.15) !important;
+  background-color: var(--positive) !important;
+  color:  var(--text-main);
   border: 1px solid var(--positive);
 }
+
 .derrota {
-  background-color: rgba(239, 68, 68, 0.15) !important;
+  background-color: var(--negative) !important;
+  color:  var(--text-main);
   border: 1px solid var(--negative);
 }
+
 .empate {
-  background-color: rgba(245, 158, 11, 0.1) !important;
+  background-color: var(--warning) !important;
+  color: var(--text-main);
+  border: 1px solid var(--warning);
 }
 
 /* Tabela */
@@ -328,7 +356,7 @@ table {
   border-collapse: collapse;
 }
 th {
-  background: #111827;
+  background: var(--bg-jogo);
   color: var(--text-dim);
   font-size: 0.7rem;
   text-transform: uppercase;
@@ -376,8 +404,7 @@ td {
     th:nth-child(7), td:nth-child(7), /* D */
     th:nth-child(8), td:nth-child(8), /* SG */
     th:nth-child(9), td:nth-child(9), /* SG */
-    th:nth-child(11), td:nth-child(11)  /* Forma */
-     {
+    th:nth-child(11), td:nth-child(11)  /* Forma */ {
     display: none;
   }
 
@@ -393,7 +420,6 @@ td {
     display: flex;
     flex-direction: column;
   }
-
 }
 
 /* Remove setinhas do input number */
@@ -408,7 +434,7 @@ input[type="number"] {
 }
 
 .espectador-box {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--bg-card);
   padding: 6px 10px;
   border-radius: 6px;
   font-size: 0.85rem;
@@ -424,25 +450,26 @@ input[type="number"] {
 
 /* Força as cores dentro do card de tabela para garantir a exportação */
 #tabelaParaImagem {
-  color: #f8fafc !important; /* Cor clara fixa (var --text-main) */
+  color: var(--text-main) !important; /* Mudado de #f8fafc */
 }
 
 #tabelaParaImagem h3 {
-  color: #f8fafc !important;
+  color: var(--text-main) !important;
 }
 
 #tabelaParaImagem table th {
-  color: #94a3b8 !important; /* Cor cinza clara fixa (var --text-dim) */
+  color: var(--text-dim) !important; /* Mudado de #94a3b8 */
 }
 
 #tabelaParaImagem table td {
-  color: #f8fafc !important;
+  color: var(--text-main) !important;
 }
 
 /* Forçar cores para exportação da rodada */
 .card-print-fix {
   color: #f8fafc !important;
-  background-color: #1e293b !important;
+  background-color: #02473f !important;
+  border: 1px solid #03221e !important;
 }
 
 .card-print-fix .time-label {
@@ -454,7 +481,7 @@ input[type="number"] {
 }
 
 .card-print-fix .jogo-linha {
-  background: #0f172a !important; /* Fundo mais escuro para contraste */
+  background: #0f172a !important;
 }
 
 /* Ajuste no container para evitar transbordamento */
@@ -467,12 +494,12 @@ input[type="number"] {
   overflow: hidden; /* Garante que nada saia do limite do card */
 }
 
-#searchClub { 
+#searchClub {
   flex: 1;
   min-width: 0; /* Essencial: permite que o input encolha abaixo do tamanho do conteúdo */
   padding: 10px; /* Reduzido levemente */
-  background: #0f172a;
-  border: 2px solid var(--primary);
+  background: var(--bg-body);
+  border: 2px solid var(--bg-card);
   color: white;
   border-radius: 8px;
   font-size: 0.9rem; /* Levemente menor para mobile */
@@ -488,6 +515,16 @@ input[type="number"] {
   display: flex;
   align-items: center;
   justify-content: center;
+  background: var(--border);
+  color: var(--text-main);
+  font-weight: 600;
+  border: 1px solid var(--border);
+}
+
+.btn-ver-tabela:hover {
+  background: var(--positive);
+  border: 1px solid var(--positive);
+  transform: translateY(-1px);
 }
 
 /* Ajuste específico para celulares muito pequenos */
@@ -496,12 +533,11 @@ input[type="number"] {
     padding: 10px 8px;
     font-size: 0.8rem;
   }
-  
+
   .btn-ver-tabela span {
     display: none; /* Opcional: esconde o texto e deixa só o emoji se for muito pequeno */
   }
 }
-
 
 #btnTopo {
   display: none; /* Escondido por padrão, aparece via JS */
@@ -527,15 +563,15 @@ input[type="number"] {
 }
 
 #searchClub:focus {
-  border-color: var(--warning);
+  border-color: var(--positive);
   box-shadow: 0 0 8px rgba(16, 185, 129, 0.3);
 }
 
 /* Botão de Print da Rodada */
 .btn-print-rodada {
-  background: var(--bg-body);
+  background: var(--border);
   color: var(--text-main);
-  border: 1px solid rgba(56, 189, 248, 0.3);
+  border: 1px solid var(--border);
   padding: 10px 10px;
   border-radius: 6px;
   font-size: 0.75rem;
@@ -547,9 +583,8 @@ input[type="number"] {
 }
 
 .btn-print-rodada:hover {
-  background: #ec7f0330;
-  border: 1px solid #ec7f03;
-  color: #fff;
+  background: var(--positive);
+  border: 1px solid var(--positive);
   transform: translateY(-1px);
 }
 
@@ -561,4 +596,102 @@ input[type="number"] {
 /* Garante que o botão suma no print */
 .is-printing .btn-print-rodada {
   display: none !important;
+}
+
+/* Definições para o Tema Claro */
+:root.light-mode {
+  --bg-body: #f1f5f9;
+  --bg-card: #ffffff;
+  --bg-input: #ffffff;
+  --bg-jogo: #f8fafc;
+  --text-main: #1e293b;
+  --text-dim: #64748b;
+  --primary: #02473f;
+  --positive: #10b981;
+  --negative: #ef4444;
+  --border: #e2e8f0;
+  --warning: #f59e0b;
+  --shadow: rgba(0, 0, 0, 0.08);
+}
+
+/* Estilo para o botão de alternância na navbar */
+.theme-switch-wrapper {
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.1);
+  padding: 5px 10px;
+  border-radius: 20px;
+}
+
+.theme-switch {
+  display: inline-block;
+  height: 24px;
+  position: relative;
+  width: 50px;
+}
+
+.theme-switch input {
+  display: none;
+}
+
+.slider {
+  background-color: #ccc;
+  bottom: 0;
+  cursor: pointer;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  background-color: var(--bg-card);
+  bottom: 4px;
+  content: "";
+  height: 16px;
+  left: 4px;
+  position: absolute;
+  transition: 0.4s;
+  width: 16px;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: var(--positive);
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+/* Ajustes finos para legibilidade no modo claro */
+.light-mode .jogo-linha {
+  background: var(--bg-jogo);
+  border: 1px solid var(--border);
+}
+
+/* Ajuste das cores de resultado para não "gritarem" no modo claro */
+.light-mode .vitoria { background-color: #d1fae5 !important; color: #065f46; }
+.light-mode .derrota { background-color: #fee2e2 !important; color: #991b1b; }
+.light-mode .empate  { background-color: #fef3c7 !important; color: #92400e; }
+
+.light-mode input[type="text"],
+.light-mode select,
+.light-mode input[type="number"],
+.light-mode #searchClub {
+  background: #ffffff !important;
+  color: #1e293b !important;
+  border: 1px solid #cbd5e1;
+}
+
+/* Corrigir o nome da marca que está fixo em laranja escuro */
+.light-mode .brand-name {
+  color: var(--primary);
+}
+
+/* Corrigir a tagline que some no branco */
+.light-mode .tagline {
+  color: var(--text-dim);
 }
