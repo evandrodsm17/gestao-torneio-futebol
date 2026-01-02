@@ -10,9 +10,9 @@
   --text-dim: #f9f47c;
   --primary: #d9f745;
   --positive: #10b981;
-  --negative: #ef4444;
+  --negative: #ef4444bf;
   --border: #03221e;
-  --warning: #f59e0b;
+  --warning: #f59f0b81;
   --shadow: rgba(0, 0, 0, 0.3);
   --blue-button-bg: #0e53c2;
   --blue-button-text: #f8fafc;
@@ -34,7 +34,7 @@
   --positive: #059669;
   --negative: #dc2626;
   --border: #e2e8f0; /* Bordas sutis */
-  --warning: #d97706;
+  --warning: #fc8803a1;
   --shadow: rgba(0, 0, 0, 0.05);
 }
 
@@ -211,21 +211,19 @@ button svg {
 }
 
 .btn-add {
-  background: var(--bg-jogo);
+  background: var(--green-button-bg);
   border: 1px solid var(--bg-jogo);
-  color: var(--text-main);
+  color: var(--green-button-text);
 }
 
 .btn-add:hover {
-  background: var(--positive);
-  border: 1px solid var(--positive);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
 }
 
 .btn-generate {
-  background: var(--bg-card);
-  border: 1px solid var(--primary);
-  color: var(--text-main);
+  background: var(--green-button-bg);
+  border: 1px solid var(--green-button-bg);
+  color: var(--green-button-text);
   width: 100%;
   margin-top: 10px;
 }
@@ -235,9 +233,9 @@ button svg {
 }
 
 .btn-import {
-  background: var(--primary);
-  border: 1px solid var(--primary);
-  color: var(--text-main);
+  background: var(--blue-button-bg);
+  border: 1px solid var(--blue-button-bg);
+  color: var(--blue-button-text);
   border: none;
   width: 100%;
   margin-top: 10px;
@@ -334,13 +332,13 @@ input[type="number"] {
 /* Cores de Resultado dinâmicas */
 .vitoria {
   background-color: var(--positive) !important;
-  color:  var(--text-main);
+  color: var(--text-main);
   border: 1px solid var(--positive);
 }
 
 .derrota {
   background-color: var(--negative) !important;
-  color:  var(--text-main);
+  color: var(--text-main);
   border: 1px solid var(--negative);
 }
 
@@ -450,7 +448,8 @@ input[type="number"] {
 
 /* Força as cores dentro do card de tabela para garantir a exportação */
 #tabelaParaImagem {
-  color: var(--text-main) !important; /* Mudado de #f8fafc */
+  color: var(--text-main) !important;
+  background-color: var(--bg-card) !important;
 }
 
 #tabelaParaImagem h3 {
@@ -458,30 +457,26 @@ input[type="number"] {
 }
 
 #tabelaParaImagem table th {
-  color: var(--text-dim) !important; /* Mudado de #94a3b8 */
+  color: var(--text-dim) !important;
+  background-color: var(--bg-jogo) !important;
 }
 
 #tabelaParaImagem table td {
   color: var(--text-main) !important;
+  border-bottom: 1px solid var(--border) !important;
 }
 
 /* Forçar cores para exportação da rodada */
 .card-print-fix {
-  color: #f8fafc !important;
-  background-color: #02473f !important;
+  color: var(--text-main) !important;
+  background-color: var(--bg-body) !important; /* Cor do card no tema escuro */
   border: 1px solid #03221e !important;
 }
 
-.card-print-fix .time-label {
-  color: #f8fafc !important;
-}
-
-.card-print-fix .nome-jogador {
-  color: #94a3b8 !important;
-}
-
-.card-print-fix .jogo-linha {
-  background: #0f172a !important;
+/* Garante que os textos internos também fiquem claros no print do modo escuro */
+.card-print-fix .time-label,
+.card-print-fix h4 {
+  color: var(--text-main) !important;
 }
 
 /* Ajuste no container para evitar transbordamento */
@@ -515,16 +510,14 @@ input[type="number"] {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--border);
-  color: var(--text-main);
+  background: var(--green-button-bg);
+  color: var(--green-button-text);
   font-weight: 600;
-  border: 1px solid var(--border);
+  border: none;
 }
 
 .btn-ver-tabela:hover {
-  background: var(--positive);
-  border: 1px solid var(--positive);
-  transform: translateY(-1px);
+  transform: translateY(-3px);
 }
 
 /* Ajuste específico para celulares muito pequenos */
@@ -546,20 +539,15 @@ input[type="number"] {
   z-index: 99;
   border: none;
   outline: none;
-  background: #5e6d676a;
-  color: white;
+  background: none;
+  border: 1px solid var(--primary);
+  color: var(--primary);
   cursor: pointer;
   padding: 15px;
   border-radius: 6px; /* Formato circular */
   width: 150px;
   height: 50px;
   font-size: 0.8rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-#btnTopo:hover {
-  background: #7a807e7d;
-  transform: scale(1.05);
 }
 
 #searchClub:focus {
@@ -569,9 +557,9 @@ input[type="number"] {
 
 /* Botão de Print da Rodada */
 .btn-print-rodada {
-  background: var(--border);
-  color: var(--text-main);
-  border: 1px solid var(--border);
+  background: var(--blue-button-bg);
+  color: var(--blue-button-text);
+  border: none;
   padding: 10px 10px;
   border-radius: 6px;
   font-size: 0.75rem;
@@ -583,9 +571,7 @@ input[type="number"] {
 }
 
 .btn-print-rodada:hover {
-  background: var(--positive);
-  border: 1px solid var(--positive);
-  transform: translateY(-1px);
+  transform: translateY(-3px);
 }
 
 .btn-print-rodada svg {
@@ -673,9 +659,18 @@ input:checked + .slider:before {
 }
 
 /* Ajuste das cores de resultado para não "gritarem" no modo claro */
-.light-mode .vitoria { background-color: #d1fae5 !important; color: #065f46; }
-.light-mode .derrota { background-color: #fee2e2 !important; color: #991b1b; }
-.light-mode .empate  { background-color: #fef3c7 !important; color: #92400e; }
+.light-mode .vitoria {
+  background-color: #d1fae5 !important;
+  color: #065f46;
+}
+.light-mode .derrota {
+  background-color: #fee2e2 !important;
+  color: #991b1b;
+}
+.light-mode .empate {
+  background-color: #fef3c7 !important;
+  color: #92400e;
+}
 
 .light-mode input[type="text"],
 .light-mode select,

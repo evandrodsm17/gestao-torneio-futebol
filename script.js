@@ -660,23 +660,27 @@ function atualizarPlacarDinamicamente(ri, ji, lado, valor) {
 
 function printRodada(index) {
   const elemento = document.getElementById(`card-rodada-${index}`);
-  const btn = elemento.querySelector("button");
+  const btn = elemento.querySelector(".btn-print-rodada");
+  const isLightMode = document.documentElement.classList.contains("light-mode");
 
   // 1. Preparar para o print
-  btn.style.opacity = "0"; // Esconde o botão sem mudar o layout
-  elemento.classList.add("card-print-fix"); // Aplica as cores fixas
+  btn.style.opacity = "0";
+  
+  // Só aplicamos a correção visual forçada se NÃO estivermos no modo claro
+  if (!isLightMode) {
+    elemento.classList.add("card-print-fix");
+  }
+
+  // Definimos a cor de fundo do canvas baseada no tema atual
+  const bgColor = isLightMode ? "#f1f5f9" : "#1e293b";
 
   html2canvas(elemento, {
-    backgroundColor: "#1e293b",
-    scale: 3, // Aumentei o scale para 3 para ficar ainda mais nítido
-    logging: false,
+    backgroundColor: bgColor,
+    scale: 3,
     useCORS: true,
   }).then((canvas) => {
-    const link = document.createElement("a");
-    link.download = `Rodada_${index + 1}_TabelaFC.png`;
-    link.href = canvas.toDataURL("image/png");
-    link.click();
-
+    compartilharImagem(canvas, `Rodada_${index + 1}.png`);
+    
     // 2. Restaurar estado original
     btn.style.opacity = "1";
     elemento.classList.remove("card-print-fix");
@@ -756,11 +760,18 @@ async function compartilharImagem(canvas, fileName) {
 // Atualize a sua função compartilharTabela
 function compartilharTabela() {
   const elemento = document.getElementById("tabelaParaImagem");
-  html2canvas(elemento, { backgroundColor: "#1e293b", scale: 2 }).then(
-    (canvas) => {
-      compartilharImagem(canvas, "classificacao_geral.png");
-    }
-  );
+  
+  // Captura as cores reais definidas no CSS (seja light ou dark mode)
+  const estiloComputado = getComputedStyle(document.documentElement);
+  const bgColor = estiloComputado.getPropertyValue('--bg-card').trim();
+
+  html2canvas(elemento, { 
+    backgroundColor: bgColor, 
+    scale: 2,
+    useCORS: true 
+  }).then((canvas) => {
+    compartilharImagem(canvas, "classificacao_geral.png");
+  });
 }
 
 // Atualize a sua função printRodada
